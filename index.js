@@ -1,7 +1,10 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
 
 const PORT = 4000;
+app.use(cors());
+app.use(express.json());
 
 let movies = [
   {
@@ -110,6 +113,7 @@ let movies = [
       "When Earth becomes uninhabitable in the future, a farmer and ex-NASA\\n pilot, Joseph Cooper, is tasked to pilot a spacecraft, along with a team\\n of researchers, to find a new planet for humans.",
     rating: 8.8,
     trailer: "https://youtu.be/NgsQ8mVkN8w",
+
     id: "109",
   },
 ];
@@ -142,7 +146,7 @@ app.delete("/movies/:id", function (request, response) {
 
 const { v4: uuidv4, v4 } = require("uuid");
 
-app.post("/movies", express.json(), (req, res) => {
+app.post("/movies", (req, res) => {
   const data = req.body;
   data.id = v4();
   console.log(data);
@@ -150,7 +154,7 @@ app.post("/movies", express.json(), (req, res) => {
   res.send(movies);
 });
 
-app.put("/movies/:id", express.json(), function (request, response) {
+app.put("/movies/:id", function (request, response) {
   const { id } = request.params;
   const movie = movies.find((m) => m.id == id);
   const idx = movies.indexOf(movie);
