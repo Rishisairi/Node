@@ -1,5 +1,7 @@
 import express from "express";
 import { v4 as uuidv4 } from "uuid";
+import { Movies } from "../entities/movies.entity.js";
+
 const router = express.Router();
 
 let movies = [
@@ -114,8 +116,10 @@ let movies = [
   },
 ];
 
-router.get("/", function (request, response) {
-  response.send(movies);
+router.get("/", async function (request, response) {
+  // response.send(movies);
+  const allMovies = await Movies.scan.go();
+  response.send(allMovies.data);
 });
 
 router.get("/:id", function (request, response) {
@@ -136,13 +140,15 @@ router.delete("/:id", function (request, response) {
   }
 });
 
-
-router.post("", (req, res) => {
+router.post("", async function (req, res) {
   const data = req.body;
-  data.id = v4();
-  console.log(data);
-  movies.push(data);
-  res.send(movies);
+  const addMovie = {
+    ...data,
+    movieId: uuidv4(),
+  };
+  await Movies.create(addMovie).go();
+  console.log(addMovie);
+  res.send(addMovie);
 });
 
 router.put("/:id", function (request, response) {
