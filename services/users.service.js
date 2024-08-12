@@ -4,8 +4,8 @@ async function createUsers(user) {
   return await Users.create(user).go();
 }
 
-function getUser(username) {
-  return Users.get(username).go();
+async function getUser(username) {
+  return await Users.get({ username }).go();
 }
 
 export { createUsers, getUser };

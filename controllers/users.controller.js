@@ -36,4 +36,53 @@ async function createNewUsers(request, response) {
   }
 }
 
-export { createNewUsers };
+async function loginUser(request, response) {
+  const data = request.body;
+
+  const userFromDB = await getUser(data.username);
+
+  if (!userFromDB.data) {
+    response.status(400).send({ msg: "Invalid data" });
+    return;
+  } else {
+    const storedPassword = userFromDB.data.password;
+    const providedPassword = data.password;
+    const isPasswordCheck = await bcrypt.compare(
+      providedPassword,
+      storedPassword
+    );
+    if (isPasswordCheck) {
+      response.status(200).send({ msg: ` ${data.username} Login success` });
+    } else {
+      response.status(400).send({ msg: "invalid data" });
+    }
+  }
+}
+
+// async function loginUser(req, res) {
+//   const data = req.body;
+//   const userFromDB = await getUser(data.userName);
+//   if (!userFromDB.data) {
+//     res.status(404).send({ msg: "Invalid Credentials" });
+//     return;
+//   } else {
+//     const storedDBPassword = userFromDB.data.password;
+//     const providedPassword = data.password;
+//     const isPasswordCheck = await bcrypt.compare(
+//       providedPassword,
+//       storedDBPassword
+//     );
+//     if (isPasswordCheck) {
+//       //   var token = jwt.sign(
+//       //     { foo: userFromDB.data.userName },
+//       //     process.env.SECRET_KEY
+//       //   );
+
+//       res.status(200).send({ msg: "Login Successful", token });
+//     } else {
+//       res.status(400).send({ msg: "Invalid Credentials" });
+//     }
+//   }
+// }
+
+export { createNewUsers, loginUser };

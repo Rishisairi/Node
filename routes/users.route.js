@@ -1,10 +1,13 @@
 import express, { response } from "express";
 
-import { createNewUsers } from "../controllers/users.controller.js";
+import { createNewUsers, loginUser } from "../controllers/users.controller.js";
 
 const router = express.Router();
 
 router.post("/signup", createNewUsers);
+
+router.post("/login", loginUser);
+
 // router.route("/").get(getAllMovies).post(CreateNewMovieData);
 
 // router
