@@ -1,4 +1,5 @@
 import { createUsers, getUser } from "../services/users.service.js";
+import jwt from "jsonwebtoken";
 
 import bcrypt from "bcrypt";
 
@@ -52,37 +53,19 @@ async function loginUser(request, response) {
       storedPassword
     );
     if (isPasswordCheck) {
-      response.status(200).send({ msg: ` ${data.username} Login success` });
+      var token = jwt.sign(
+        { foo: userFromDB.data.username },
+        process.env.SECRET_KEY
+      );
+
+      console.log(token);
+      response
+        .status(200)
+        .send({ msg: ` ${data.username} Login success`, token });
     } else {
       response.status(400).send({ msg: "invalid data" });
     }
   }
 }
-
-// async function loginUser(req, res) {
-//   const data = req.body;
-//   const userFromDB = await getUser(data.userName);
-//   if (!userFromDB.data) {
-//     res.status(404).send({ msg: "Invalid Credentials" });
-//     return;
-//   } else {
-//     const storedDBPassword = userFromDB.data.password;
-//     const providedPassword = data.password;
-//     const isPasswordCheck = await bcrypt.compare(
-//       providedPassword,
-//       storedDBPassword
-//     );
-//     if (isPasswordCheck) {
-//       //   var token = jwt.sign(
-//       //     { foo: userFromDB.data.userName },
-//       //     process.env.SECRET_KEY
-//       //   );
-
-//       res.status(200).send({ msg: "Login Successful", token });
-//     } else {
-//       res.status(400).send({ msg: "Invalid Credentials" });
-//     }
-//   }
-// }
 
 export { createNewUsers, loginUser };
