@@ -54,11 +54,9 @@ async function loginUser(request, response) {
     );
     if (isPasswordCheck) {
       var token = jwt.sign(
-        { foo: userFromDB.data.username },
+        { nithin: userFromDB.data.username },
         process.env.SECRET_KEY
       );
-
-      console.log(token);
       response
         .status(200)
         .send({ msg: ` ${data.username} Login success`, token });
