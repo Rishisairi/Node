@@ -10,5 +10,4 @@ const auth = (request, response, next) => {
     response.send({ msg: { err } });
   }
 };
-
 export { auth };

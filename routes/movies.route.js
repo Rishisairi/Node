@@ -12,7 +12,7 @@ import { auth } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
-router.route("/").get(auth, getAllMovies).post(CreateNewMovieData);
+router.route("/").get(getAllMovies).post(CreateNewMovieData);
 
 router
   .route("/:movieId")
